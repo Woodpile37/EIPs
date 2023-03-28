@@ -9,7 +9,7 @@
     "@types/node": "^14.14.6",
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.4.7",
+    "ethers": "^6.0.8",
     "hardhat": "^2.6.7",
     "hardhat-abi-exporter": "^2.3.1",
     "hardhat-typechain": "^0.3.3",
