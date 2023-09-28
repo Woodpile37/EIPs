@@ -10,7 +10,7 @@
     "@openzeppelin/contracts": "^4.7.3",
     "@truffle/hdwallet-provider": "^2.1.0",
     "bn.js": "^5.2.1",
-    "commander": "^9.4.1",
+    "commander": "^11.0.0",
     "config": "^3.3.8",
     "eccrypto": "^1.1.6",
     "keccak256": "^1.0.6",
