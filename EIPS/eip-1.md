@@ -93,6 +93,8 @@ If this period results in necessary normative changes it will revert the EIP to 
 
 **Living** - A special status for EIPs that are designed to be continually updated and not reach a state of finality. This includes most notably EIP-1.
 
+A PR moving an EIP from one status to another MUST NOT contain any changes other than the status update. Any other changes MUST be submitted in one or more separate PRs. When the content of an EIP changes, the git branch of any PR that changes the status of that EIP MUST be rebased to reflect the current version.
+
 ## What belongs in a successful EIP?
 
 Each EIP should have the following parts:
@@ -196,9 +198,27 @@ Other than the specific exceptions listed below, links to external resources **S
 
 The process governing permitted external resources is described in [EIP-5757](./eip-5757.md).
 
+### Execution Client Specifications
+
+Links to the Ethereum Execution Client Specifications may be included using normal markdown syntax, such as:
+
+```markdown
+[Ethereum Execution Client Specifications](https://github.com/ethereum/execution-specs/blob/9a1f22311f517401fed6c939a159b55600c454af/README.md)
+```
+
+Which renders to:
+
+[Ethereum Execution Client Specifications](https://github.com/ethereum/execution-specs/blob/9a1f22311f517401fed6c939a159b55600c454af/README.md)
+
+Permitted Execution Client Specifications URLs must anchor to a specific commit, and so must match this regular expression:
+
+```regex
+^(https://github.com/ethereum/execution-specs/blob/[0-9a-f]{40}/.*|https://github.com/ethereum/execution-specs/tree/[0-9a-f]{40}/.*)$
+```
+
 ### Consensus Layer Specifications
 
-Links to the Ethereum Consensus Layer Specifications may be included using normal markdown syntax, such as:
+Links to specific commits of files within the Ethereum Consensus Layer Specifications may be included using normal markdown syntax, such as:
 
 ```markdown
 [Beacon Chain](https://github.com/ethereum/consensus-specs/blob/26695a9fdb747ecbe4f0bb9812fedbc402e5e18c/specs/sharding/beacon-chain.md)
@@ -216,7 +236,7 @@ Permitted Consensus Layer Specifications URLs must anchor to a specific commit, 
 
 ### Networking Specifications
 
-Links to the Ethereum Networking Specifications may be included using normal markdown syntax, such as:
+Links to specific commits of files within the Ethereum Networking Specifications may be included using normal markdown syntax, such as:
 
 ```markdown
 [Ethereum Wire Protocol](https://github.com/ethereum/devp2p/blob/40ab248bf7e017e83cc9812a4e048446709623e8/caps/eth.md)

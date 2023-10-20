@@ -8,7 +8,7 @@ source "https://rubygems.org"
 #
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
-gem "minima", "~> 2.5", ">= 2.5.1"
+gem "minima", "~> 2.0"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
@@ -20,8 +20,10 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Performance-booster for watching directories on Windows
-gem "wdm", "~> 0.1.0" if Gem.win_platform?
+gem "wdm", "~> 0.1.1" if Gem.win_platform?
 
 gem "html-proofer", ">= 3.16.0"
 
-gem "eip_validator", ">= 0.8.2"
+gem "eip_validator", ">=0.8.2"
+
+gem "webrick", "~> 1.8" # needed for macOS builds
