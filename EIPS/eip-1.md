@@ -75,25 +75,25 @@ The following is the standardization process for all EIPs in all tracks:
 
 **Idea** - An idea that is pre-draft. This is not tracked within the EIP Repository.
 
-**Draft** - The first formally tracked stage of an EIP in development. An EIP is merged by an EIP Editor into the EIP repository when properly formatted. EIP editors and accounts authorized by any EIP editor can assign EIP numbers, which need not be unsigned integers for EIPs with a status of Draft. EIP numbers can also be unassigned by the account that assigned that number, as long as it is not the only assigned number. If multiple numbers are assigned, the EIP author is free to choose from any of the assigned numbers.
+**Draft** - The first formally tracked stage of an EIP in development. An EIP is merged by an EIP Editor into the EIP repository when properly formatted.
 
 **Review** - An EIP Author marks an EIP as ready for and requesting Peer Review.
 
-**Last Call** - This is the final review window for an EIP before moving to `Final`. An EIP editor will assign `Last Call` status and set a review end date (`last-call-deadline`), typically 14 days later. If 6 months pass after the `last-call-deadline`, it is moved back into `Review`.
+**Last Call** - This is the final review window for an EIP before moving to `Final`. An EIP editor will assign `Last Call` status and set a review end date (`last-call-deadline`), typically 14 days later.
 
 If this period results in necessary normative changes it will revert the EIP to `Review`.
 
 **Final** - This EIP represents the final standard. A Final EIP exists in a state of finality and should only be updated to correct errata and add non-normative clarifications.
 
-A PR moving an EIP from Last Call to Final SHOULD contain no changes other than the status update. Any content or editorial proposed change SHOULD be separate from this status-updating PR and committed prior to it.
-
-**Stagnant** - Any EIP with a status of `Draft` or `Review`, if inactive for a period of 6 months or greater is moved to `Stagnant`. An EIP may be resurrected from this state by Authors or EIP Editors through moving it back to `Draft` or its earlier status. If not resurrected, a proposal may stay forever in this status.
+**Stagnant** - Any EIP in `Draft` or `Review` or `Last Call` if inactive for a period of 6 months or greater is moved to `Stagnant`. An EIP may be resurrected from this state by Authors or EIP Editors through moving it back to `Draft` or it's earlier status. If not resurrected, a proposal may stay forever in this status.
 
 >*EIP Authors are notified of any algorithmic change to the status of their EIP*
 
 **Withdrawn** - The EIP Author(s) have withdrawn the proposed EIP. This state has finality and can no longer be resurrected using this EIP number. If the idea is pursued at later date it is considered a new proposal.
 
 **Living** - A special status for EIPs that are designed to be continually updated and not reach a state of finality. This includes most notably EIP-1.
+
+A PR moving an EIP from one status to another MUST NOT contain any changes other than the status update. Any other changes MUST be submitted in one or more separate PRs. When the content of an EIP changes, the git branch of any PR that changes the status of that EIP MUST be rebased to reflect the current version.
 
 ## What belongs in a successful EIP?
 
@@ -213,7 +213,7 @@ Which renders to:
 Permitted Execution Client Specifications URLs must anchor to a specific commit, and so must match this regular expression:
 
 ```regex
-^(https://github.com/ethereum/execution-specs/(blob|commit)/[0-9a-f]{40}/.*|https://github.com/ethereum/execution-specs/tree/[0-9a-f]{40}/.*)$
+^(https://github.com/ethereum/execution-specs/blob/[0-9a-f]{40}/.*|https://github.com/ethereum/execution-specs/tree/[0-9a-f]{40}/.*)$
 ```
 
 ### Consensus Layer Specifications
@@ -231,7 +231,7 @@ Which renders to:
 Permitted Consensus Layer Specifications URLs must anchor to a specific commit, and so must match this regular expression:
 
 ```regex
-^https://github.com/ethereum/consensus-specs/(blob|commit)/[0-9a-f]{40}/.*$
+^https://github.com/ethereum/consensus-specs/blob/[0-9a-f]{40}/.*$
 ```
 
 ### Networking Specifications
@@ -249,81 +249,7 @@ Which renders as:
 Permitted Networking Specifications URLs must anchor to a specific commit, and so must match this regular expression:
 
 ```regex
-^https://github.com/ethereum/devp2p/(blob|commit)/[0-9a-f]{40}/.*$
-```
-
-### World Wide Web Consortium (W3C)
-
-Links to a W3C "Recommendation" status specification may be included using normal markdown syntax. For example, the following link would be allowed:
-
-```markdown
-[Secure Contexts](https://www.w3.org/TR/2021/CRD-secure-contexts-20210918/)
-```
-
-Which renders as:
-
-[Secure Contexts](https://www.w3.org/TR/2021/CRD-secure-contexts-20210918/)
-
-Permitted W3C recommendation URLs MUST anchor to a specification in the technical reports namespace with a date, and so MUST match this regular expression:
-
-```regex
-^https://www\.w3\.org/TR/[0-9][0-9][0-9][0-9]/.*$
-```
-
-### Web Hypertext Application Technology Working Group (WHATWG)
-
-Links to WHATWG specifications may be included using normal markdown syntax, such as:
-
-```markdown
-[HTML](https://html.spec.whatwg.org/commit-snapshots/578def68a9735a1e36610a6789245ddfc13d24e0/)
-```
-
-Which renders as:
-
-[HTML](https://html.spec.whatwg.org/commit-snapshots/578def68a9735a1e36610a6789245ddfc13d24e0/)
-
-Permitted WHATWG specification URLs must anchor to a specification defined in the `spec` subdomain (idea specifications are not allowed) and to a commit snapshot, and so must match this regular expression:
-
-```regex
-^https:\/\/[a-z]*\.spec\.whatwg\.org/commit-snapshots/[0-9a-f]{40}/$
-```
-
-Although not recommended by WHATWG, EIPs must anchor to a particular commit so that future readers can refer to the exact version of the living standard that existed at the time the EIP was finalized. This gives readers sufficient information to maintain compatibility, if they so choose, with the version referenced by the EIP and the current living standard.
-
-### Internet Engineering Task Force (IETF)
-
-Links to an IETF Request For Comment (RFC) specification may be included using normal markdown syntax, such as:
-
-```markdown
-[RFC 8446](https://www.rfc-editor.org/rfc/rfc8446)
-```
-
-Which renders as:
-
-[RFC 8446](https://www.rfc-editor.org/rfc/rfc8446)
-
-Permitted IETF specification URLs MUST anchor to a specification with an assigned RFC number (meaning cannot reference internet drafts), and so MUST match this regular expression:
-
-```regex
-^https:\/\/www.rfc-editor.org\/rfc\/.*$
-```
-
-### Bitcoin Improvement Proposal
-
-Links to Bitcoin Improvement Proposals may be included using normal markdown syntax, such as:
-
-```markdown
-[BIP 38](https://github.com/bitcoin/bips/blob/3db736243cd01389a4dfd98738204df1856dc5b9/bip-0038.mediawiki)
-```
-
-Which renders to:
-
-[BIP 38](https://github.com/bitcoin/bips/blob/3db736243cd01389a4dfd98738204df1856dc5b9/bip-0038.mediawiki)
-
-Permitted Bitcoin Improvement Proposal URLs must anchor to a specific commit, and so must match this regular expression:
-
-```regex
-^(https://github.com/bitcoin/bips/blob/[0-9a-f]{40}/bip-[0-9]+\.mediawiki)$
+^https://github.com/ethereum/devp2p/blob/[0-9a-f]{40}/.*$
 ```
 
 ### Digital Object Identifier System
@@ -400,24 +326,6 @@ This is a sentence with a footnote.[^1]
 See the [Citation Style Language Schema](https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json) for the supported fields. In addition to passing validation against that schema, references must include a DOI and at least one URL.
 
 The top-level URL field must resolve to a copy of the referenced document which can be viewed at zero cost. Values under `additional-urls` must also resolve to a copy of the referenced document, but may charge a fee.
-
-### Other Websites
-
-Links to other websites are allowed as long as one of the following archival conditions are met:
-
-- In the case of an HTML document, a printer-safe PDF of the webpage (created using [readability.js](https://github.com/mozilla/readability)) is placed in `/assets/eip-<number>/archive/<domain>/<path>`, where path can use as many subfolders as need be. The port number is ignored.
-- In the case of any downloadable file without external references, a copy of that file is placed in `/assets/eip-<number>/archive/<domain>/<path>`, where path can use as many subfolders as need be. The port number is ignored.
-- In the case of any downloadable file with external references, a copy of that file and all external references, all modified to use those archived references, are placed in `/assets/eip-<number>/archive/<domain>/<path>`, where path can use as many subfolders as need be, and the domain and path depend on the file. The port number is ignored.
-
-Additionally, all of the below conditions must be met:
-
-- The link must use the `https` URI scheme
-
-If the conditions are met, the link can be used by adding a superscript, as follows:
-
-```markdown
-[<link text>](<link>)<sup>[\[archive\]](../assets/eip-<number>/archive/<...>)</sup>
-```
 
 ## Linking to other EIPs
 
