@@ -1,53 +1,47 @@
 ---
 eip: 20
 title: Token Standard
+description: A standard interface for tokens
 author: Fabian Vogelsteller <fabian@ethereum.org>, Vitalik Buterin <vitalik.buterin@ethereum.org>
+discussions-to: https://github.com/ethereum/EIPs/issues/20
+status: Final
 type: Standards Track
 category: ERC
-status: Final
 created: 2015-11-19
 ---
-
-## Simple Summary
-
-A standard interface for tokens.
-
 
 ## Abstract
 
 The following standard allows for the implementation of a standard API for tokens within smart contracts.
 This standard provides basic functionality to transfer tokens, as well as allow tokens to be approved so they can be spent by another on-chain third party.
 
-
 ## Motivation
 
 A standard interface allows any tokens on Ethereum to be re-used by other applications: from wallets to decentralized exchanges.
 
-
 ## Specification
 
-## Token
-### Methods
+### Token
+
+#### Methods
 
 **NOTES**:
+
  - The following specifications use syntax from Solidity `0.4.17` (or above)
  - Callers MUST handle `false` from `returns (bool success)`.  Callers MUST NOT assume that `false` is never returned!
 
-
-#### name
+##### name
 
 Returns the name of the token - e.g. `"MyToken"`.
 
 OPTIONAL - This method can be used to improve usability,
 but interfaces and other contracts MUST NOT expect these values to be present.
 
-
 ``` js
 function name() public view returns (string)
 ```
 
-
-#### symbol
+##### symbol
 
 Returns the symbol of the token. E.g. "HIX".
 
@@ -58,9 +52,7 @@ but interfaces and other contracts MUST NOT expect these values to be present.
 function symbol() public view returns (string)
 ```
 
-
-
-#### decimals
+##### decimals
 
 Returns the number of decimals the token uses - e.g. `8`, means to divide the token amount by `100000000` to get its user representation.
 
@@ -71,8 +63,7 @@ but interfaces and other contracts MUST NOT expect these values to be present.
 function decimals() public view returns (uint8)
 ```
 
-
-#### totalSupply
+##### totalSupply
 
 Returns the total token supply.
 
@@ -80,9 +71,7 @@ Returns the total token supply.
 function totalSupply() public view returns (uint256)
 ```
 
-
-
-#### balanceOf
+##### balanceOf
 
 Returns the account balance of another account with address `_owner`.
 
@@ -90,9 +79,7 @@ Returns the account balance of another account with address `_owner`.
 function balanceOf(address _owner) public view returns (uint256 balance)
 ```
 
-
-
-#### transfer
+##### transfer
 
 Transfers `_value` amount of tokens to address `_to`, and MUST fire the `Transfer` event.
 The function SHOULD `throw` if the message caller's account balance does not have enough tokens to spend.
@@ -103,9 +90,7 @@ The function SHOULD `throw` if the message caller's account balance does not hav
 function transfer(address _to, uint256 _value) public returns (bool success)
 ```
 
-
-
-#### transferFrom
+##### transferFrom
 
 Transfers `_value` amount of tokens from address `_from` to address `_to`, and MUST fire the `Transfer` event.
 
@@ -119,22 +104,20 @@ The function SHOULD `throw` unless the `_from` account has deliberately authoriz
 function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
 ```
 
-
-
-#### approve
+##### approve
 
 Allows `_spender` to withdraw from your account multiple times, up to the `_value` amount. If this function is called again it overwrites the current allowance with `_value`.
 
-**NOTE**: To prevent attack vectors like the one [described here](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/) and discussed [here](https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729),
 clients SHOULD make sure to create user interfaces in such a way that they set the allowance first to `0` before setting it to another value for the same spender.
 THOUGH The contract itself shouldn't enforce it, to allow backwards compatibility with contracts deployed before
+
+**NOTE**: Please read the [Security Considerations](#security-considerations) section for potential attack vectors.
 
 ``` js
 function approve(address _spender, uint256 _value) public returns (bool success)
 ```
 
-
-#### allowance
+##### allowance
 
 Returns the amount which `_spender` is still allowed to withdraw from `_owner`.
 
@@ -142,12 +125,9 @@ Returns the amount which `_spender` is still allowed to withdraw from `_owner`.
 function allowance(address _owner, address _spender) public view returns (uint256 remaining)
 ```
 
+#### Events
 
-
-### Events
-
-
-#### Transfer
+##### Transfer
 
 MUST trigger when tokens are transferred, including zero value transfers.
 
@@ -157,9 +137,7 @@ A token contract which creates new tokens SHOULD trigger a Transfer event with t
 event Transfer(address indexed _from, address indexed _to, uint256 _value)
 ```
 
-
-
-#### Approval
+##### Approval
 
 MUST trigger on any successful call to `approve(address _spender, uint256 _value)`.
 
@@ -167,27 +145,31 @@ MUST trigger on any successful call to `approve(address _spender, uint256 _value
 event Approval(address indexed _owner, address indexed _spender, uint256 _value)
 ```
 
+## Backwards Compatibility
+
+Many existing tokens deployed on the Ethereum network already support this EIP.
+
+## Security Considerations
+
+### Re-approval
+
+#### Description of re-approval attack
+
+1. Alice approves Bob to transfer $N$ of Alice's tokens (where $N>0$) by calling `approve(Bob, N)`
+2. Later, Alice decides to set the approval from $N$ to $M$ ( $M>0$ ), so she calls `approve(Bob, M)`
+3. Bob notices Alice's second transaction when it is submitted to the mempool
+4. Before Alice's `approve(Bob, M)` transaction is included in a block, Bob sends a transaction calling `transferFrom(Alice, Bob, N)` with a higer priority fee than Alice's transaction, and a transaction calling `transferFrom(Alice, Bob, M)` with a lower priority fee than Alice's transaction
+5. Bob's `transferFrom(Alice, Bob, N)` will be executed first, transfering $N$ tokens from Alice to Bob
+6. Next, Alice's `approve(Bob, M)` will execute, allowing Bob to transfer an additonal $M$ tokens
+7. Finally, Bob's `transferFrom(Alice, Bob, M)` will be executed first, transfering another $M$ tokens from Alice to Bob
+
+Bob was able to transfer a total of $N+M$ tokens instead of a total of $M$.
 
 
-## Implementation
+#### Mitigation of re-appproval attack
 
-There are already plenty of ERC20-compliant tokens deployed on the Ethereum network.
-Different implementations have been written by various teams that have different trade-offs: from gas saving to improved security.
-
-#### Example implementations are available at
-- [OpenZeppelin implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/9b3710465583284b8c4c5d2245749246bb2e0094/contracts/token/ERC20/ERC20.sol)
-- [ConsenSys implementation](https://github.com/ConsenSys/Tokens/blob/fdf687c69d998266a95f15216b1955a4965a0a6d/contracts/eip20/EIP20.sol)
-
-
-## History
-
-Historical links related to this standard:
-
-- Original proposal from Vitalik Buterin: https://github.com/ethereum/wiki/wiki/Standardized_Contract_APIs/499c882f3ec123537fc2fccd57eaa29e6032fe4a
-- Reddit discussion: https://www.reddit.com/r/ethereum/comments/3n8fkn/lets_talk_about_the_coin_standard/
-- Original Issue #20: https://github.com/ethereum/EIPs/issues/20
-
-
+Frontends should be written such that if a non-zero approval is to be raised or lowered, the approval is first set to zero and the transaction included in a block.
 
 ## Copyright
+
 Copyright and related rights waived via [CC0](../LICENSE.md).
