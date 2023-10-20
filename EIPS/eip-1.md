@@ -24,7 +24,7 @@ There are three types of EIP:
 - A **Standards Track EIP** describes any change that affects most or all Ethereum implementations, such as—a change to the network protocol, a change in block or transaction validity rules, proposed application standards/conventions, or any change or addition that affects the interoperability of applications using Ethereum. Standards Track EIPs consist of three parts—a design document, an implementation, and (if warranted) an update to the [formal specification](https://github.com/ethereum/yellowpaper). Furthermore, Standards Track EIPs can be broken down into the following categories:
   - **Core**: improvements requiring a consensus fork (e.g. [EIP-5](./eip-5.md), [EIP-101](./eip-101.md)), as well as changes that are not necessarily consensus critical but may be relevant to [“core dev” discussions](https://github.com/ethereum/pm) (for example, [EIP-90], and the miner/node strategy changes 2, 3, and 4 of [EIP-86](./eip-86.md)).
   - **Networking**: includes improvements around [devp2p](https://github.com/ethereum/devp2p/blob/readme-spec-links/rlpx.md) ([EIP-8](./eip-8.md)) and [Light Ethereum Subprotocol](https://ethereum.org/en/developers/docs/nodes-and-clients/#light-node), as well as proposed improvements to network protocol specifications of [whisper](https://github.com/ethereum/go-ethereum/issues/16013#issuecomment-364639309) and [swarm](https://github.com/ethereum/go-ethereum/pull/2959).
-  - **Interface**: includes improvements around language-level standards like method names ([EIP-6](./eip-6.md)) and [contract ABIs](https://docs.soliditylang.org/en/develop/abi-spec.html).
+  - **Interface**: includes improvements around client [API/RPC](https://github.com/ethereum/execution-apis#README) specifications and standards, and also certain language-level standards like method names ([EIP-6](./eip-6.md)) and [contract ABIs](https://docs.soliditylang.org/en/develop/abi-spec.html). The label “interface” aligns with the [interfaces repo] and discussion should primarily occur in that repository before an EIP is submitted to the EIPs repository.
   - **ERC**: application-level standards and conventions, including contract standards such as token standards ([ERC-20](./eip-20.md)), name registries ([ERC-137](./eip-137.md)), URI schemes, library/package formats, and wallet formats.
 
 - A **Meta EIP** describes a process surrounding Ethereum or proposes a change to (or an event in) a process. Process EIPs are like Standards Track EIPs but apply to areas other than the Ethereum protocol itself. They may propose an implementation, but not to Ethereum's codebase; they often require community consensus; unlike Informational EIPs, they are more than recommendations, and users are typically not free to ignore them. Examples include procedures, guidelines, changes to the decision-making process, and changes to the tools or environment used in Ethereum development. Any meta-EIP is also considered a Process EIP.
@@ -85,8 +85,6 @@ If this period results in necessary normative changes it will revert the EIP to 
 
 **Final** - This EIP represents the final standard. A Final EIP exists in a state of finality and should only be updated to correct errata and add non-normative clarifications.
 
-A PR moving an EIP from Last Call to Final SHOULD contain no changes other than the status update. Any content or editorial proposed change SHOULD be separate from this status-updating PR and committed prior to it.
-
 **Stagnant** - Any EIP in `Draft` or `Review` or `Last Call` if inactive for a period of 6 months or greater is moved to `Stagnant`. An EIP may be resurrected from this state by Authors or EIP Editors through moving it back to `Draft` or it's earlier status. If not resurrected, a proposal may stay forever in this status.
 
 >*EIP Authors are notified of any algorithmic change to the status of their EIP*
@@ -95,111 +93,20 @@ A PR moving an EIP from Last Call to Final SHOULD contain no changes other than 
 
 **Living** - A special status for EIPs that are designed to be continually updated and not reach a state of finality. This includes most notably EIP-1.
 
-## What's in an EIP?
+## What belongs in a successful EIP?
 
-An EIP must contain no more than one of each section, in the following order:
+Each EIP should have the following parts:
 
-### Preamble/Front Matter
-
-**Required for all EIPs**
-
-An EIP's preamble consists of RFC 822-style headers with EIP metadata. See [EIP Header/Preamble](#eip-header-preamble) for details.
-
-### Abstract
-
-**Required for all EIPs**
-
-The abstract is a short paragraph (multi-sentence) technical summary. This should be a very terse yet human-readable version of the specification and motivation sections, and should define the narrow scope of the EIP. Reading an abstract should be sufficient to generally understand the EIP.
-
-This is a normative section.
-
-### Motivation
-
-**Required for Core EIPs; Optional for all non-Core EIPs**
-
-The Motivation section explains in detail the problem that the EIP's Specification solves. Readers are assumed to know that lack of interoperability is a problem; this section should be omitted if the only problem being solved is a lack of interoperability.
-
-**An EIP's solution to the problems should be discussed in the Rationale, and must not be discussed in the Motivation.*
-
-This is a non-normative section.
-
-### Specification 
-
-**Required for all EIPs**
-
-The Specification describes the EIP's solution to the problems listed in the Motivation section. The specification must clearly identify the characteristics of the solution in detail. The specification should be as general as possible while avoiding ambiguity.
-
-This is a normative section. If this section conflicts with any other normative section, the other section must be amended to satisfy the specification unless it is evident that the specification is incorrect.
-
-### Rationale
-
-**Required for all EIPs**
-
-The rationale describes how the specification solves the problems described in the Rationale, and discusses why particular design decisions were made over others, including any tradeoffs made. The rationale must discuss important objections or concerns raised about the EIP.
-
-**The Rationale should assume that the reader has read the Motivation. It is okay to restate a problem and relevant characteristics when discussing the solution, but do not mention irrelevant characteristics.**
-
-This is a non-normative section.
-
-### Backwards Compatibility
-
-**Required for all EIPs**
-
-The Backwards Compatibility section describes any backward incompatibilities and their consequences. If no backward incompatibilities are found, the following wording can be used:
-
-```md
-No backward compatibility issues found.
-```
-
-If the EIP is in draft or review, the following wording should be used until significant discussion has taken place:
-
-```md
-No backward compatibility issues found. Needs discussion.
-```
-
-This is a non-normative section. Additions of newly-identified backward compatibility issues should be proposed, even after an EIP reaches final.
-
-### Test Cases
-
-**Required for all Core EIPs; Optional for all non-Core EIPs**
-
-The Test Cases section provides data with which to test implementations. Tests should either be inlined in the EIP as input/expected output pairs (recommended), or included as unit tests in the EIP's assets directory.
-
-This is a normative section, but in the case of a conflict, the Specification section is considered more normative, and the Test Cases should be amended.
-
-### Reference Implementation
-
-**Optional for all EIPs**
-
-The Reference Implementation provides a minimal non-production-ready implementation that people can use to assist in understanding or implementing the specification. More complex, production-ready implementations can be submitted to [ERCRef](https://github.com/ercref/ercref-contracts) and/or [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts).
-
-This is a non-normative section. In the case of a conflict with the Specification section, the Reference Implementation should be amended.
-
-### Security Considerations
-
-**Required for all EIPs**
-
-The Security Considerations section discusses the security and privacy implications of the proposed specifciation. The section should include attack vectors, deanonymization and fingerprinting risks, potential ramifications of an exploit, pitfalls, or any other information that could be important for evaluating the security of any system that implements the EIP. The following wording can be used while an EIP is in draft or review:
-
-```md
-No security considerations found. Needs discussion.
-```
-
-EIPs cannot be moved to Last Call or Final with an insufficient security considerations.
-
-This is a non-normative section. Additions of newly-identified security considerations should be proposed, even after an EIP reaches final.
-
-### Copyright Waiver
-
-**Required for all EIPs**
-
-All EIPs must be licenced using the CC0 1.0 Universal Public Domain Dedication. The copyright waiver MUST link to the repository's `LICENSE.md` file and use the following wording:
-
-```md
-Copyright and related rights waived via [CC0](../LICENSE.md).
-```
-
-All assets that can legally be licensed under CC0 must be licensed under CC0 or multi-licensed with CC0.
+- Preamble - RFC 822 style headers containing metadata about the EIP, including the EIP number, a short descriptive title (limited to a maximum of 44 characters), a description (limited to a maximum of 140 characters), and the author details. Irrespective of the category, the title and description should not include EIP number. See [below](./eip-1.md#eip-header-preamble) for details.
+- Abstract - Abstract is a multi-sentence (short paragraph) technical summary. This should be a very terse and human-readable version of the specification section. Someone should be able to read only the abstract to get the gist of what this specification does.
+- Motivation *(optional)* - A motivation section is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. This section may be omitted if the motivation is evident.
+- Specification - The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (besu, erigon, ethereumjs, go-ethereum, nethermind, or others).
+- Rationale - The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale should discuss important objections or concerns raised during discussion around the EIP.
+- Backwards Compatibility *(optional)* - All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their consequences. The EIP must explain how the author proposes to deal with these incompatibilities. This section may be omitted if the proposal does not introduce any backwards incompatibilities, but this section must be included if backward incompatibilities exist.
+- Test Cases *(optional)* - Test cases for an implementation are mandatory for EIPs that are affecting consensus changes. Tests should either be inlined in the EIP as data (such as input/expected output pairs, or included in `../assets/eip-###/<filename>`. This section may be omitted for non-Core proposals.
+- Reference Implementation *(optional)* - An optional section that contains a reference/example implementation that people can use to assist in understanding or implementing this specification. This section may be omitted for all EIPs.
+- Security Considerations - All EIPs must contain a section that discusses the security implications/considerations relevant to the proposed change. Include information that might be important for security discussions, surfaces risks and can be used throughout the life-cycle of the proposal. E.g. include security-relevant design decisions, concerns, important discussions, implementation-specific guidance and pitfalls, an outline of threats and risks and how they are being addressed. EIP submissions missing the "Security Considerations" section will be rejected. An EIP cannot proceed to status "Final" without a Security Considerations discussion deemed sufficient by the reviewers.
+- Copyright Waiver - All EIPs must be in the public domain. The copyright waiver MUST link to the license file and use the following wording: `Copyright and related rights waived via [CC0](../LICENSE.md).`
 
 ## EIP Formats and Templates
 
@@ -208,8 +115,6 @@ EIPs should be written in [markdown](https://github.com/adam-p/markdown-here/wik
 ## EIP Header Preamble
 
 Each EIP must begin with an [RFC 822](https://www.ietf.org/rfc/rfc822.txt) style header preamble, preceded and followed by three hyphens (`---`). This header is also termed ["front matter" by Jekyll](https://jekyllrb.com/docs/front-matter/). The headers must appear in the following order.
-
-`eip`: *EIP number*
 
 `title`: *The EIP title is a few words, not a complete sentence*
 
@@ -228,6 +133,8 @@ Each EIP must begin with an [RFC 822](https://www.ietf.org/rfc/rfc822.txt) style
 `category`: *One of `Core`, `Networking`, `Interface`, or `ERC`* (Optional field, only needed for `Standards Track` EIPs)
 
 `created`: *Date the EIP was created on*
+
+`requires`: *EIP number(s)* (Optional field)
 
 `withdrawal-reason`: *A sentence explaining why the EIP was withdrawn.* (Optional field, only needed when status is `Withdrawn`)
 
@@ -275,33 +182,21 @@ The `category` header specifies the EIP's category. This is required for standar
 
 The `created` header records the date that the EIP was assigned a number. Both headers should be in yyyy-mm-dd format, e.g. 2001-08-14.
 
+### `requires` header
+
+EIPs may have a `requires` header, indicating the EIP numbers that this EIP depends on. If such a dependency exists, this field is required.
+
+A `requires` dependency is created when the current EIP cannot be understood or implemented without a concept or technical element from another EIP. Merely mentioning another EIP does not necessarily create such a dependency.
+
 ## Linking to External Resources
 
 Other than the specific exceptions listed below, links to external resources **SHOULD NOT** be included. External resources may disappear, move, or change unexpectedly.
 
 The process governing permitted external resources is described in [EIP-5757](./eip-5757.md).
 
-### Execution Client Specifications
-
-Links to the Ethereum Execution Client Specifications may be included using normal markdown syntax, such as:
-
-```markdown
-[Ethereum Execution Client Specifications](https://github.com/ethereum/execution-specs/blob/9a1f22311f517401fed6c939a159b55600c454af/README.md)
-```
-
-Which renders to:
-
-[Ethereum Execution Client Specifications](https://github.com/ethereum/execution-specs/blob/9a1f22311f517401fed6c939a159b55600c454af/README.md)
-
-Permitted Execution Client Specifications URLs must anchor to a specific commit, and so must match this regular expression:
-
-```regex
-^(https://github.com/ethereum/execution-specs/(blob|commit)/[0-9a-f]{40}/.*|https://github.com/ethereum/execution-specs/tree/[0-9a-f]{40}/.*)$
-```
-
 ### Consensus Layer Specifications
 
-Links to specific commits of files within the Ethereum Consensus Layer Specifications may be included using normal markdown syntax, such as:
+Links to the Ethereum Consensus Layer Specifications may be included using normal markdown syntax, such as:
 
 ```markdown
 [Beacon Chain](https://github.com/ethereum/consensus-specs/blob/26695a9fdb747ecbe4f0bb9812fedbc402e5e18c/specs/sharding/beacon-chain.md)
@@ -314,12 +209,12 @@ Which renders to:
 Permitted Consensus Layer Specifications URLs must anchor to a specific commit, and so must match this regular expression:
 
 ```regex
-^https://github.com/ethereum/consensus-specs/(blob|commit)/[0-9a-f]{40}/.*$
+^https://github.com/ethereum/consensus-specs/blob/[0-9a-f]{40}/.*$
 ```
 
 ### Networking Specifications
 
-Links to specific commits of files within the Ethereum Networking Specifications may be included using normal markdown syntax, such as:
+Links to the Ethereum Networking Specifications may be included using normal markdown syntax, such as:
 
 ```markdown
 [Ethereum Wire Protocol](https://github.com/ethereum/devp2p/blob/40ab248bf7e017e83cc9812a4e048446709623e8/caps/eth.md)
@@ -332,94 +227,8 @@ Which renders as:
 Permitted Networking Specifications URLs must anchor to a specific commit, and so must match this regular expression:
 
 ```regex
-^https://github.com/ethereum/devp2p/(blob|commit)/[0-9a-f]{40}/.*$
+^https://github.com/ethereum/devp2p/blob/[0-9a-f]{40}/.*$
 ```
-
-### World Wide Web Consortium (W3C)
-
-Links to a W3C "Recommendation" status specification may be included using normal markdown syntax. For example, the following link would be allowed:
-
-```markdown
-[Secure Contexts](https://www.w3.org/TR/2021/CRD-secure-contexts-20210918/)
-```
-
-Which renders as:
-
-[Secure Contexts](https://www.w3.org/TR/2021/CRD-secure-contexts-20210918/)
-
-Permitted W3C recommendation URLs MUST anchor to a specification in the technical reports namespace with a date, and so MUST match this regular expression:
-
-```regex
-^https://www\.w3\.org/TR/[0-9][0-9][0-9][0-9]/.*$
-```
-
-### Web Hypertext Application Technology Working Group (WHATWG)
-
-Links to WHATWG specifications may be included using normal markdown syntax, such as:
-
-```markdown
-[HTML](https://html.spec.whatwg.org/commit-snapshots/578def68a9735a1e36610a6789245ddfc13d24e0/)
-```
-
-Which renders as:
-
-[HTML](https://html.spec.whatwg.org/commit-snapshots/578def68a9735a1e36610a6789245ddfc13d24e0/)
-
-Permitted WHATWG specification URLs must anchor to a specification defined in the `spec` subdomain (idea specifications are not allowed) and to a commit snapshot, and so must match this regular expression:
-
-```regex
-^https:\/\/[a-z]*\.spec\.whatwg\.org/commit-snapshots/[0-9a-f]{40}/$
-```
-
-Although not recommended by WHATWG, EIPs must anchor to a particular commit so that future readers can refer to the exact version of the living standard that existed at the time the EIP was finalized. This gives readers sufficient information to maintain compatibility, if they so choose, with the version referenced by the EIP and the current living standard.
-
-### Internet Engineering Task Force (IETF)
-
-Links to an IETF Request For Comment (RFC) specification may be included using normal markdown syntax, such as:
-
-```markdown
-[RFC 8446](https://www.rfc-editor.org/rfc/rfc8446)
-```
-
-Which renders as:
-
-[RFC 8446](https://www.rfc-editor.org/rfc/rfc8446)
-
-Permitted IETF specification URLs MUST anchor to a specification with an assigned RFC number (meaning cannot reference internet drafts), and so MUST match this regular expression:
-
-```regex
-^https:\/\/www.rfc-editor.org\/rfc\/.*$
-```
-
-### Bitcoin Improvement Proposal
-
-Links to Bitcoin Improvement Proposals may be included using normal markdown syntax, such as:
-
-```markdown
-[BIP 38](https://github.com/bitcoin/bips/blob/3db736243cd01389a4dfd98738204df1856dc5b9/bip-0038.mediawiki)
-```
-
-Which renders to:
-
-[BIP 38](https://github.com/bitcoin/bips/blob/3db736243cd01389a4dfd98738204df1856dc5b9/bip-0038.mediawiki)
-
-Permitted Bitcoin Improvement Proposal URLs must anchor to a specific commit, and so must match this regular expression:
-
-```regex
-^(https://github.com/bitcoin/bips/blob/[0-9a-f]{40}/bip-[0-9]+\.mediawiki)$
-```
-
-### National Vulnerability Database (NVD)
-
-Links to the Common Vulnerabilities and Exposures (CVE) system as published by the National Institute of Standards and Technology (NIST) may be included, provided they are qualified by the date of the most recent change, using the following syntax:
-
-```markdown
-[CVE-2023-29638 (2023-10-17T10:14:15)](https://nvd.nist.gov/vuln/detail/CVE-2023-29638)
-```
-
-Which renders to:
-
-[CVE-2023-29638 (2023-10-17T10:14:15)](https://nvd.nist.gov/vuln/detail/CVE-2023-29638)
 
 ### Digital Object Identifier System
 
@@ -546,7 +355,7 @@ If the EIP isn't ready, the editor will send it back to the author for revision,
 
 Once the EIP is ready for the repository, the EIP editor will:
 
-- Assign an EIP number (generally incremental; editors can reassign if number sniping is suspected)
+- Assign an EIP number (generally the PR number, but the decision is with the editors)
 - Merge the corresponding [pull request](https://github.com/ethereum/EIPs/pulls)
 - Send a message back to the EIP author with the next step.
 
