@@ -13,7 +13,7 @@ gem "minima", "~> 2.5", ">= 2.5.1"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.13", ">= 0.13.0"
-  gem "github-pages", "224"
+  gem "github-pages", "225"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -22,6 +22,6 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Performance-booster for watching directories on Windows
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
-gem "html-proofer", ">= 3.15.3"
+gem "html-proofer", ">= 3.19.4"
 
 gem "eip_validator", ">= 0.8.2"
