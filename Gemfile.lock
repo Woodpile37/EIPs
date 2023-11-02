@@ -1,9 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (6.0.3.1)
-      activesupport (= 6.0.3.1)
-    activesupport (6.0.3.1)
+    Ascii85 (1.1.0)
+    activemodel (7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activesupport (7.0.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -42,10 +43,10 @@ GEM
     gemoji (3.0.1)
     github-pages (225)
       github-pages-health-check (= 1.17.9)
-      jekyll (= 3.9.0)
+      jekyll (= 3.9.3)
       jekyll-avatar (= 0.7.0)
       jekyll-coffeescript (= 1.1.1)
-      jekyll-commonmark-ghpages (= 0.2.0)
+      jekyll-commonmark-ghpages (= 0.4.0)
       jekyll-default-layout (= 0.1.4)
       jekyll-feed (= 0.15.1)
       jekyll-gist (= 1.5.0)
@@ -77,12 +78,12 @@ GEM
       jekyll-theme-time-machine (= 0.2.0)
       jekyll-titles-from-headings (= 0.5.3)
       jemoji (= 0.12.0)
-      kramdown (= 2.3.1)
+      kramdown (= 2.3.2)
       kramdown-parser-gfm (= 1.1.0)
-      liquid (= 4.0.3)
+      liquid (= 4.0.4)
       mercenary (~> 0.3)
       minima (= 2.5.1)
-      nokogiri (>= 1.12.5, < 2.0)
+      nokogiri (>= 1.13.6, < 2.0)
       rouge (= 3.26.0)
       terminal-table (~> 1.4)
     github-pages-health-check (1.17.9)
@@ -104,13 +105,14 @@ GEM
       yell (~> 2.0)
       zeitwerk (~> 2.5)
     http_parser.rb (0.8.0)
-    i18n (0.9.5)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    jekyll (3.9.0)
+    io-event (1.1.7)
+    jekyll (3.9.3)
       addressable (~> 2.4)
       colorator (~> 1.0)
       em-websocket (~> 0.5)
-      i18n (~> 0.7)
+      i18n (>= 0.7, < 2)
       jekyll-sass-converter (~> 1.0)
       jekyll-watch (~> 2.0)
       kramdown (>= 1.17, < 3)
@@ -126,11 +128,11 @@ GEM
       coffee-script-source (~> 1.11.1)
     jekyll-commonmark (1.4.0)
       commonmarker (~> 0.22)
-    jekyll-commonmark-ghpages (0.2.0)
-      commonmarker (~> 0.23.4)
+    jekyll-commonmark-ghpages (0.4.0)
+      commonmarker (~> 0.23.7)
       jekyll (~> 3.9.0)
       jekyll-commonmark (~> 1.4.0)
-      rouge (>= 2.0, < 4.0)
+      rouge (>= 2.0, < 5.0)
     jekyll-default-layout (0.1.4)
       jekyll (~> 3.0)
     jekyll-feed (0.15.1)
@@ -214,7 +216,7 @@ GEM
       gemoji (~> 3.0)
       html-pipeline (~> 2.2)
       jekyll (>= 3.0, < 5.0)
-    kramdown (2.3.1)
+    kramdown (2.3.2)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
@@ -238,6 +240,12 @@ GEM
     parallel (1.23.0)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
+    pdf-reader (2.11.0)
+      Ascii85 (~> 1.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     public_suffix (4.0.7)
     racc (1.7.2)
     rainbow (3.1.1)
@@ -246,6 +254,7 @@ GEM
       ffi (~> 1.0)
     rexml (3.2.6)
     rouge (3.26.0)
+    ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     safe_yaml (1.0.5)
@@ -261,7 +270,8 @@ GEM
       unf (~> 0.1.4)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
-    thread_safe (0.3.6)
+    timers (4.3.5)
+    ttfunk (1.7.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
     tzinfo (1.2.11)
@@ -270,11 +280,13 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (1.8.0)
+    webrick (1.8.1)
     yell (2.2.2)
     zeitwerk (2.6.12)
 
 PLATFORMS
-  ruby
+  arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   eip_validator (>= 0.8.2)
@@ -283,6 +295,7 @@ DEPENDENCIES
   jekyll-feed (~> 0.13, >= 0.13.0)
   minima (~> 2.5, >= 2.5.1)
   tzinfo-data
+  webrick (~> 1.8)
 
 BUNDLED WITH
-   1.17.3
+   2.4.12
