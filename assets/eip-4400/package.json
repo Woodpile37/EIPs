@@ -15,7 +15,7 @@
     "hardhat-typechain": "^0.3.3",
     "ts-node": "^10.4.0",
     "typechain": "^8.1.1",
-    "typescript": "^4.5.2"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.2"
